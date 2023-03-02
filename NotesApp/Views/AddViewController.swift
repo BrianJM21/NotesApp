@@ -22,6 +22,14 @@ class AddViewController: UIViewController, SettingController {
         if let settings = settingLoad() {
             noteText.backgroundColor = settings.noteColor
         }
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+    }
+
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            self.view.frame.size.height -= keyboardSize.height
+            NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        }
     }
     
     @IBAction func cancelAction(_ sender: Any) {

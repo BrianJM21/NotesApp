@@ -26,6 +26,14 @@ class DetailViewController: UIViewController, SettingController {
             noteText.backgroundColor = settings.noteColor
         }
         noteTitle.text = editingNote.title
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+    }
+
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            self.view.frame.size.height -= keyboardSize.height
+            NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
